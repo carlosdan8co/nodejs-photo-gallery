@@ -6,7 +6,6 @@ const Photo= new Schema ({
     description:String,
     imageURL:String,
     public_id:String,
-
 })
 
 module.exports = model('Photo',Photo);

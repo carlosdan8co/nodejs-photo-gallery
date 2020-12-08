@@ -30,13 +30,13 @@ app.set('view engine','.hbs');
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-multer.diskStorage({
+const storage = multer.diskStorage({
     destination:path.join(__dirname,'public/uploads'),
     filename:(req,file,cb)=>{
         cb(null, new Date().getTime()+path.extname(file.originalname));
     }
 })
-app.use(multer().single('image'));
+app.use(multer({storage}).single('image'));
 
 //static files
 //app.use(express.static('public'));
