@@ -11,12 +11,15 @@ cloudinary.config({
 
 const fsx=require('fs-extra');
 
-router.get('/',(req,res)=>{
-    res.render('images');
+router.get('/',async(req,res)=>{
+    const photos=await Photo.find();
+    console.log(photos);
+    res.render('images',{photos});
 });
 
-router.get('/images/add',(req,res)=>{
-    res.render('image_form');
+router.get('/images/add', async(req,res)=>{
+    const photos=await Photo.find();
+    res.render('image_form',{photos});
 });
 
 router.post('/images/add',async(req,res)=>{
@@ -31,11 +34,21 @@ router.post('/images/add',async(req,res)=>{
     })
     await newPhoto.save();
     await fsx.unlink(req.file.path);
-    res.render('/image_form');
+    const photos=await Photo.find();
+    res.render('image_form',{photos});
 });
 
 router.get('/images',(req,res)=>{
     res.render('images');
+});
+
+router.get('/images/delete/:photo_id',async(req,res)=>{
+    const {photo_id}=req.params;
+    const photo = await Photo.findByIdAndDelete(photo_id);
+    const result =await cloudinary.v2.uploader.destroy(photo.public_id);
+    console.log(result);
+    const photos=await Photo.find();
+    res.render('image_form',{photos});
 });
 
 module.exports= router;
