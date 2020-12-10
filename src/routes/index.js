@@ -13,7 +13,7 @@ const fsx=require('fs-extra');
 
 router.get('/',async(req,res)=>{
     const photos=await Photo.find();
-    console.log(photos);
+    //console.log(photos);
     res.render('images',{photos});
 });
 
@@ -24,7 +24,7 @@ router.get('/images/add', async(req,res)=>{
 
 router.post('/images/add',async(req,res)=>{
     const{title,description} = req.body;
-    console.log(req.file);
+    //console.log(req.file);
     const result=await cloudinary.v2.uploader.upload(req.file.path);
     const newPhoto= new Photo({
         title,
